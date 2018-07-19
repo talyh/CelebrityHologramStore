@@ -9,7 +9,6 @@ class SearchBar extends Component {
     setFilterCriteria = ev => this.setState({ filterCriteria: ev.target.value })
     search = criteria => {
         const filtered = celebrityList.filter(celebrity => celebrity._id === criteria)
-        console.log(filtered)
         this.props.onSearch(filtered)
     }
 

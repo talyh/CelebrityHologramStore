@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import Header from "./components/Header"
-// import CelebrityGrid from "./components/CelebrityGrid"
+import CelebrityGrid from "./components/CelebrityGrid"
 import celebrityList from "./dummyData"
 
 class App extends Component {
@@ -14,7 +14,7 @@ class App extends Component {
     return (
       <div>
         <Header title="Celebrity Hologram Store" subtitle="Your favorite celebrities in a single place" onSearch={this.setCelebrityList} />
-        {/* <CelebrityGrid celebrityList={this.state.celebrityList} /> */}
+        <CelebrityGrid celebrityList={this.state.celebrityList} />
       </div>
     )
   }
