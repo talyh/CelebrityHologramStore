@@ -1,11 +1,9 @@
 const express = require("express")
 const app = express()
 const port = 3001
-const MongoClient = require('mongodb').MongoClient
-const ObjectId = require('mongodb').ObjectID;
-const dbURL = "mongodb://localhost:27017/CelebrityHologramStore"
-const dbName = "CelebrityHologramStore"
-const collectionName = "Celebrities"
+const read = require("./operations/read")
+const add = require("./operations/add")
+const remove = require("./operations/remove")
 
 // start server
 app.listen(port, () => {
@@ -49,44 +47,3 @@ app.delete("/celebrities", (req, res) => {
     // delete the data, passing the whole payload and the callback to return results once deleted
     remove(req.query.id, callback)
 })
-
-const read = (id, callback) => {
-    // connect to the database
-    MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
-        if (err) { throw err }
-
-        const db = client.db(dbName)
-
-        // search the collection, passing in the id if one was provided
-        db.collection(collectionName).find(id && { "_id": ObjectId(id) }).toArray((err, result) => {
-            if (err) { throw err }
-
-            // execute the callback with the result of the query
-            callback(result)
-        })
-    })
-}
-
-const add = (toAdd, callback) => {
-    // connect to the database
-    MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
-        if (err) { throw err }
-
-        const db = client.db(dbName)
-
-        // insert the record into the collection the collection, passing in the id if one was provided
-        db.collection(collectionName).insert(toAdd).then(callback)
-    })
-}
-
-const remove = (id, callback) => {
-    // connect to the database
-    MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
-        if (err) { throw err }
-
-        const db = client.db(dbName)
-
-        // insert the record into the collection the collection, passing in the id if one was provided
-        db.collection(collectionName).deleteOne({ "_id": ObjectId(id) }).then(callback)
-    })
-}
