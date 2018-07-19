@@ -28,18 +28,26 @@ app.get("/", (req, res) => {
 app.get("/celebrities", (req, res) => {
 
     // create a callback to be executed after data is read from the db
-    const callback = result => {
-        res.send(result)
-    }
+    const callback = result => res.send(result)
 
     // read data, passing in the id if there's one, and the callback to return results once read
     read(req.query.id, callback)
 })
 
 app.post("/celebrities", (req, res) => {
+    // create a callback to be executed after data is inserted into the db
     const callback = result => res.send(result)
 
+    // add the data, passing the whole payload and the callback to return results once inserted
     add(req.query, callback)
+})
+
+app.delete("/celebrities", (req, res) => {
+    // create a callback to be executed after data is deleted from the db
+    const callback = result => res.send(result)
+
+    // delete the data, passing the whole payload and the callback to return results once deleted
+    remove(req.query.id, callback)
 })
 
 const read = (id, callback) => {
@@ -68,5 +76,17 @@ const add = (toAdd, callback) => {
 
         // insert the record into the collection the collection, passing in the id if one was provided
         db.collection(collectionName).insert(toAdd).then(callback)
+    })
+}
+
+const remove = (id, callback) => {
+    // connect to the database
+    MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
+        if (err) { throw err }
+
+        const db = client.db(dbName)
+
+        // insert the record into the collection the collection, passing in the id if one was provided
+        db.collection(collectionName).deleteOne({ "_id": ObjectId(id) }).then(callback)
     })
 }
