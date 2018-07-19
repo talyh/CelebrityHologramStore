@@ -1,0 +1,8 @@
+{
+  "short_name": "Celebrity Hologram Store",
+  "name": "Celebrity Hologram Store",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#C9C9C9"
+}
