@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import celebrityList from "../dummyData"
 
 class SearchBar extends Component {
     state = {
@@ -7,10 +6,15 @@ class SearchBar extends Component {
     }
 
     setFilterCriteria = ev => this.setState({ filterCriteria: ev.target.value })
+
     search = criteria => {
-        const filtered = celebrityList.filter(celebrity => celebrity._id === criteria)
-        this.props.onSearch(filtered)
+        fetch(`http://localhost:3001/celebrities?id=${criteria}`)
+            .then(response => response.ok ? response.json() : this.handleError(response))
+            .then(result => this.props.onSearch(result))
+            .catch(error => this.handleError(error))
     }
+
+    handleError = error => console.log(error)
 
     render() {
 
