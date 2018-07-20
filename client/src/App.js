@@ -14,21 +14,25 @@ class App extends Component {
 
   setCelebrityList = newList => this.setState({ celebrityList: newList })
 
-  showInsertForm = () => this.setState({ mode: pageModes.insertion })
-
-  showDetails = () => this.setState({ mode: pageModes.details })
-
-  componentDidMount() {
+  refreshCelebrityList = () => {
     fetch("http://localhost:3001/celebrities")
       .then(response => response.ok ? response.json() : this.handleError(response))
       .then(result => this.setCelebrityList(result))
       .catch(error => this.handleError(error))
   }
 
+  showInsertForm = () => this.setState({ mode: pageModes.insertion })
+
+  showDetails = () => this.setState({ mode: pageModes.details })
+
+  componentDidMount() {
+    this.refreshCelebrityList()
+  }
+
   handleError = error => console.log(error)
 
   render() {
-    const list = <CelebrityGrid celebrityList={this.state.celebrityList} add={this.showInsertForm} />
+    const list = <CelebrityGrid celebrityList={this.state.celebrityList} add={this.showInsertForm} remove={this.refreshCelebrityList} />
     const details = <CelebrityCard />
     const insertForm = <InsertForm />
 
