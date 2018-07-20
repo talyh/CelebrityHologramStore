@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import Icon from "./Icon"
 
 class SearchBar extends Component {
     state = {
@@ -17,13 +18,10 @@ class SearchBar extends Component {
     handleError = error => console.log(error)
 
     render() {
-
-        const imgStyle = { width: "24px", cursor: "pointer" }
-
         return (
             <div>
                 <input type="text" onChange={this.setFilterCriteria} placeholder="Enter an id..." />
-                <img src="../imgs/search.png" alt="Search" onClick={() => this.search(this.state.filterCriteria)} style={imgStyle} />
+                <Icon src="search.png" alt="Search" onClick={() => this.search(this.state.filterCriteria)} />
             </div>
         )
     }
