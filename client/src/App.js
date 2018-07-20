@@ -1,20 +1,53 @@
 import React, { Component } from "react"
 import Header from "./components/Header"
 import CelebrityGrid from "./components/CelebrityGrid"
-import celebrityList from "./dummyData"
+import CelebrityCard from "./components/CelebrityCard"
+import InsertForm from "./components/InsertForm"
+import pageModes from "./constants"
+
 
 class App extends Component {
   state = {
-    celebrityList: celebrityList
+    mode: pageModes.list,
+    celebrityList: []
   }
 
   setCelebrityList = newList => this.setState({ celebrityList: newList })
 
+  showInsertForm = () => this.setState({ mode: pageModes.insertion })
+
+  showDetails = () => this.setState({ mode: pageModes.details })
+
+  componentDidMount() {
+    fetch("http://localhost:3001/celebrities")
+      .then(response => response.ok ? response.json() : this.handleError(response))
+      .then(result => this.setCelebrityList(result))
+      .catch(error => this.handleError(error))
+  }
+
+  handleError = error => console.log(error)
+
   render() {
+    const list = <CelebrityGrid celebrityList={this.state.celebrityList} add={this.showInsertForm} />
+    const details = <CelebrityCard />
+    const insertForm = <InsertForm />
+
+    const determineContents = () => {
+      switch (this.state.mode) {
+        case pageModes.list:
+        default:
+          return list
+        case pageModes.details:
+          return details
+        case pageModes.insertion:
+          return insertForm
+      }
+    }
+
     return (
       <div>
         <Header title="Celebrity Hologram Store" subtitle="Your favorite celebrities in a single place" onSearch={this.setCelebrityList} />
-        <CelebrityGrid celebrityList={this.state.celebrityList} />
+        {determineContents()}
       </div>
     )
   }
