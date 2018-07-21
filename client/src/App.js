@@ -7,7 +7,7 @@ import pageModes from "./constants"
 
 class App extends Component {
   state = {
-    mode: pageModes.list,
+    mode: "",
     celebrityList: []
   }
 
@@ -20,12 +20,12 @@ class App extends Component {
       .catch(error => this.handleError(error))
   }
 
-  showList = () => this.setState({ mode: pageModes.list })
+  showList = () => { this.setState({ mode: pageModes.list }); this.refreshCelebrityList() }
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
   showDetails = () => this.setState({ mode: pageModes.details })
 
   componentDidMount() {
-    this.refreshCelebrityList()
+    this.showList()
   }
 
   handleError = error => console.log(error)
@@ -49,7 +49,11 @@ class App extends Component {
 
     return (
       <div>
-        <Header title="Celebrity Hologram Store" subtitle="Your favorite celebrities in a single place" onSearch={this.setCelebrityList} />
+        <Header
+          title="Celebrity Hologram Store"
+          subtitle="Your favorite celebrities in a single place"
+          onSearch={this.setCelebrityList}
+          onTitleClick={this.showList} />
         {determineContents()}
       </div>
     )
