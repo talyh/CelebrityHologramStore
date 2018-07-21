@@ -5,7 +5,6 @@ import CelebrityCard from "./components/CelebrityCard"
 import InsertForm from "./components/InsertForm"
 import pageModes from "./constants"
 
-
 class App extends Component {
   state = {
     mode: pageModes.list,
@@ -21,8 +20,8 @@ class App extends Component {
       .catch(error => this.handleError(error))
   }
 
+  showList = () => this.setState({ mode: pageModes.list })
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
-
   showDetails = () => this.setState({ mode: pageModes.details })
 
   componentDidMount() {
@@ -34,7 +33,7 @@ class App extends Component {
   render() {
     const list = <CelebrityGrid celebrityList={this.state.celebrityList} add={this.showInsertForm} remove={this.refreshCelebrityList} />
     const details = <CelebrityCard />
-    const insertForm = <InsertForm />
+    const insertForm = <InsertForm onCancel={this.showList} onSave={this.showList} />
 
     const determineContents = () => {
       switch (this.state.mode) {

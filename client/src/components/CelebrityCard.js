@@ -11,7 +11,7 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode }) => {
 
     return <div>
         <h1>{celebrity.name}</h1>
-        {celebrity.roles.map(role => <div>{role}</div>)}
+        {celebrity.roles.map(role => <div key={role}>{role}</div>)}
         <img alt={`${celebrity.name}`} src={celebrity.pictureURL} />
         <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>
         <Icon src="remove.png" alt="Remove" onClick={() => remove(celebrity._id)} />
