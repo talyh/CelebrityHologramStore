@@ -37,8 +37,11 @@ app.post("/celebrities", (req, res) => {
     // create a callback to be executed after data is inserted into the db
     const callback = result => res.send(result)
 
-    // add the data, passing the whole payload and the callback to return results once inserted
-    add(req.query, callback)
+    // treat data, making the necessary transformations
+    const treatedData = { ...req.query, roles: JSON.parse(req.query.roles) }
+
+    // add the treated data, passing the whole payload and the callback to return results once inserted
+    add(treatedData, callback)
 })
 
 app.delete("/celebrities", (req, res) => {
