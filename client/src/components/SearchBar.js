@@ -1,5 +1,37 @@
 import React, { Component } from "react"
+import styled from "styled-components"
 import Icon from "./Icon"
+
+const SearchArea = styled.div.attrs({
+    id: "searchArea"
+})`
+    grid-area: Search;
+    position: relative;
+`
+
+const SearchBox = styled.input.attrs({
+    id: "searchBox",
+    type: "text"
+})`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 100%;
+    font-size: 1em;
+`
+
+const SearchIcon = styled(Icon).attrs({
+    id: "searchIcon",
+    src: "search.png",
+    alt: "Search",
+    style: {
+        paddingTop: "1.3em",
+        paddingBottom: "0.7em",
+        marginLeft: "0.5em",
+        marginRight: "0.5em"
+    }
+})`
+`
 
 class SearchBar extends Component {
     state = {
@@ -19,10 +51,10 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <div>
-                <input type="text" onChange={this.setFilterCriteria} placeholder="Enter an id..." />
-                <Icon src="search.png" alt="Search" onClick={() => this.search(this.state.filterCriteria)} />
-            </div>
+            <SearchArea>
+                <SearchBox onChange={this.setFilterCriteria} placeholder="Enter an id..." />
+                <SearchIcon onClick={() => this.search(this.state.filterCriteria)} />
+            </SearchArea>
         )
     }
 }

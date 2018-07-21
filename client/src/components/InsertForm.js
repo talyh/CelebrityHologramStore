@@ -27,7 +27,6 @@ class InsertForm extends Component {
         return result
     }
 
-    // cancel = () => { }
     save = () => fetch(`http://localhost:3001/celebrities?name=${this.state.name}&roles=${JSON.stringify(this.state.roles)}&pictureURL=${this.state.picture.url}&detailsURL=${this.state.detailsURL}`, { method: 'POST' })
         .then(response => response.ok ? response.json() : this.handleError(response))
         .then(this.props.onSave)
