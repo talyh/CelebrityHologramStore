@@ -3,33 +3,62 @@ import styled from "styled-components"
 import Icon from "./generic/Icon"
 import { cardModes } from "../constants"
 
-export const StyledCard = styled.div.attrs({
-})`
-    padding: 2em;
+export const StyledCard = styled.div`
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 2fr 2fr;
+    grid-template-areas: "Picture Name Name"
+                        "Picture Roles Roles"
+                        "Picture . Remove";
+    column-gap: 1em;
+    padding: 1.5em;
     background-color: #E8E8E8;
+    -webkit-box-shadow: 8px 8px 6px -6px #777777;
+    -moz-box-shadow: 8px 8px 6px -6px #777777;
+     box-shadow: 8px 8px 6px -6px #777777;
     cursor:${props => props.onClick ? "pointer" : "normal"};
-    height:${props => props.width};
+    height:${props => props.cellHeight}px;
     color: #707070;
-    text-align: center;
+
+    &:hover {
+         transform: scale(${props => props.hoverScale}); 
+      }
 `
 
-const StyledName = styled.h1.attrs({
-})`
+const StyledName = styled.h1`
+    grid-area: Name;
+    font-size: ${props => props.mode === cardModes.small ? "1em" : "2em"};
     pointer-events: none;
 `
 
-const StyledRole = styled.div.attrs({
-})`
+const StyledRoles = styled.div`
+    grid-area: Roles;
+    font-size: ${props => props.mode === cardModes.small ? "1em" : "2em"};
     color: #B9B9B9;
     pointer-events: none;
 `
 
 const StyledImage = styled.img`
-    pointer-events: none;
+    grid-area: Picture;
     width: ${props => props.mode === cardModes.small ? "100px" : "300px"}
+    pointer-events: none;
 `
 
-const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick }) => {
+const RemoveIcon = styled(Icon).attrs({
+    id: "removeIcon",
+    src: "remove.png",
+    alt: "Remove",
+    style: {
+        paddingTop: "1.3em",
+        paddingBottom: "0.7em",
+        marginLeft: "0.5em",
+        marginRight: "0.5em",
+        "gridArea": "Remove"
+    }
+})`
+`
+
+const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick, hoverScale, cellHeight, rolesInPreview }) => {
     const remove = criteria => fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
         .then(response => response.ok ? response.json() : handleError(response))
         .then(callbackForRemove)
@@ -37,28 +66,46 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick })
 
     const handleError = error => console.log(error)
 
+    const condenseList = (itemsToShow, list) => {
+        let listSize = itemsToShow
+
+        if (itemsToShow > list.length) {
+            listSize = list.length
+        }
+
+        let condensedList = []
+
+        for (let i = 0; i < listSize; i++) {
+            const newItem = <div id={list[i]}>{list[i]}</div>
+            condensedList = [...condensedList, newItem]
+        }
+
+        if (rolesInPreview < list.length) {
+            const showMore = <div id="More roles" > {`${list.length - itemsToShow} more`}</ div>
+            condensedList = [...condensedList, showMore]
+        }
+
+        return condensedList
+    }
+
+
     const showRoles = () => {
-        const roles = celebrity.roles.sort()
+        const roles = [...celebrity.roles].sort()
         if (mode === cardModes.small) {
-            return (
-                <div>
-                    <StyledRole id={roles[0]}>{roles[0]}</StyledRole>
-                    {roles.length > 1 && <StyledRole id="More roles">{`${roles.length - 1} more`}</StyledRole>}
-                </div>
-            )
+            return <StyledRoles mode={mode} id="roles">{condenseList(rolesInPreview, roles)}</StyledRoles>
         }
         else {
-            return roles.map(role => <StyledRole id={role} key={role}>{role}</StyledRole>)
+            return <StyledRoles mode={mode} id="roles">{condenseList(roles.length, roles)}</StyledRoles>
         }
     }
 
     return (
-        <StyledCard id={celebrity._id} onClick={onClick} onMouseEnter={onHover && (ev => onHover(ev.target.id))} >
-            <StyledName id={celebrity.name}>{celebrity.name}</StyledName>
+        <StyledCard id={celebrity._id} onClick={onClick} onMouseEnter={onHover && (ev => onHover(ev.target.id))} hoverScale={hoverScale} cellHeight={cellHeight} >
+            <StyledName id={celebrity.name} mode={mode}>{celebrity.name}</StyledName>
             {showRoles()}
             <StyledImage alt={`${celebrity.name}`} src={celebrity.pictureURL} mode={mode} />
             {mode === cardModes.big && <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>}
-            <Icon src="remove.png" alt="Remove" onClick={() => remove(celebrity._id)} />
+            <RemoveIcon onClick={() => remove(celebrity._id)} />
         </StyledCard >
     )
 }

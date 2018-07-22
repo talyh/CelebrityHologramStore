@@ -1,9 +1,16 @@
 import React, { Component } from "react"
+import styled from "styled-components"
 import Header from "./components/Header"
 import CelebrityGrid from "./components/CelebrityGrid"
 import CelebrityCard from "./components/CelebrityCard"
 import InsertForm from "./components/InsertForm"
 import { pageModes, cardModes } from "./constants"
+
+const Content = styled.div`
+  position: relative;
+  top: 12em;
+  padding: 2em;
+`
 
 class App extends Component {
   state = {
@@ -66,7 +73,9 @@ class App extends Component {
           subtitle="Your favorite celebrities in a single place"
           onSearch={this.setCelebrityList}
           onTitleClick={this.showList} />
-        {determineContents()}
+        <Content id="content">
+          {determineContents()}
+        </Content>
       </div>
     )
   }
