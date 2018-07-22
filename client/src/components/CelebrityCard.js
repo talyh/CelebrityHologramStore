@@ -3,16 +3,18 @@ import styled from "styled-components"
 import Icon from "./generic/Icon"
 import { cardModes } from "../constants"
 
-const StyledCard = styled.div.attrs({
+export const StyledCard = styled.div.attrs({
 })`
     padding: 2em;
     background-color: #E8E8E8;
     cursor:${props => props.onClick ? "pointer" : "normal"};
+    height:${props => props.width};
+    color: #707070;
+    text-align: center;
 `
 
 const StyledName = styled.h1.attrs({
 })`
-    color: #707070;
     pointer-events: none;
 `
 
@@ -24,6 +26,7 @@ const StyledRole = styled.div.attrs({
 
 const StyledImage = styled.img`
     pointer-events: none;
+    width: ${props => props.mode === cardModes.small ? "100px" : "300px"}
 `
 
 const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick }) => {
@@ -53,7 +56,7 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick })
         <StyledCard id={celebrity._id} onClick={onClick} onMouseEnter={onHover && (ev => onHover(ev.target.id))} >
             <StyledName id={celebrity.name}>{celebrity.name}</StyledName>
             {showRoles()}
-            <StyledImage alt={`${celebrity.name}`} src={celebrity.pictureURL} />
+            <StyledImage alt={`${celebrity.name}`} src={celebrity.pictureURL} mode={mode} />
             {mode === cardModes.big && <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>}
             <Icon src="remove.png" alt="Remove" onClick={() => remove(celebrity._id)} />
         </StyledCard >

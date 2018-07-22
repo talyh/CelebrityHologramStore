@@ -2,8 +2,8 @@ import React from "react"
 import styled from "styled-components"
 
 const StyledIcon = styled.img`
-width: ${props => props.width};
-height: ${props => props.height};
+    width: ${props => props.width};
+    height: ${props => props.height};
     cursor: pointer
 `
 
