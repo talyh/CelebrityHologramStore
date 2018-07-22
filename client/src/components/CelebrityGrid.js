@@ -9,6 +9,9 @@ const cellSize = { width: 288, height: 160 }
 const gap = 10
 const hoverScale = 1.1
 
+const AddIconCard = StyledCard.extend`
+    text-align:center;
+`
 const AddIcon = styled(Icon).attrs({
     id: "addIcon",
     src: "add.png",
@@ -18,7 +21,8 @@ const AddIcon = styled(Icon).attrs({
         heigth: "5em"
     },
     style: {
-        padding: "5em"
+        alignSelf: "center",
+        margin: "0 auto"
     }
 })`
 `
@@ -38,12 +42,12 @@ const CelebrityGrid = ({ celebrityList, add, remove, onCardHover, onCardClick })
 
     return (
         <Mosaic id="celebrityGrid" size={cellSize} gap={gap} itemsAmount={celebrityList.length} area={window.innerWidth}>
-            <StyledCard onClick={add} hoverScale={hoverScale} cellHeight={cellSize.height}>
+            <AddIconCard id="addCard" onClick={add} hoverScale={hoverScale}>
                 <AddIcon />
-                <div>Add a new celebrity</div>
-            </StyledCard>
+                Add a new celebrity
+            </AddIconCard>
             {generateCards(celebrityList)}
-        </Mosaic>
+        </Mosaic >
     )
 }
 
