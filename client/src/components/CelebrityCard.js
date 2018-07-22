@@ -13,12 +13,20 @@ const StyledCard = styled.div.attrs({
 const StyledName = styled.h1.attrs({
 })`
     color: #707070;
+    pointer-events: none;
 `
 
 const StyledRole = styled.div.attrs({
-})``
+})`
+    color: #B9B9B9;
+    pointer-events: none;
+`
 
-const CelebrityCard = ({ celebrity, callbackForRemove, mode, onClick }) => {
+const StyledImage = styled.img`
+    pointer-events: none;
+`
+
+const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick }) => {
     const remove = criteria => fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
         .then(response => response.ok ? response.json() : handleError(response))
         .then(callbackForRemove)
@@ -42,13 +50,13 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode, onClick }) => {
     }
 
     return (
-        <StyledCard id={celebrity._id} onClick={onClick}>
+        <StyledCard id={celebrity._id} onClick={onClick} onMouseEnter={onHover && (ev => onHover(ev.target.id))} >
             <StyledName id={celebrity.name}>{celebrity.name}</StyledName>
-            {/* {showRoles()} */}
-            <img alt={`${celebrity.name}`} src={celebrity.pictureURL} />
+            {showRoles()}
+            <StyledImage alt={`${celebrity.name}`} src={celebrity.pictureURL} />
             {mode === cardModes.big && <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>}
             <Icon src="remove.png" alt="Remove" onClick={() => remove(celebrity._id)} />
-        </StyledCard>
+        </StyledCard >
     )
 }
 

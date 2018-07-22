@@ -23,7 +23,8 @@ class App extends Component {
 
   showList = () => { this.setState({ mode: pageModes.list }); this.refreshCelebrityList() }
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
-  showDetails = id => this.setState({ mode: pageModes.details, celebrityShown: this.state.celebrityList.filter(celebrity => celebrity._id == id)[0] })
+  showDetails = () => this.setState({ mode: pageModes.details })
+  selectCelebrity = id => this.setState({ celebrityShown: this.state.celebrityList.filter(celebrity => celebrity._id == id)[0] })
 
   componentDidMount() {
     this.showList()
@@ -36,6 +37,7 @@ class App extends Component {
       celebrityList={this.state.celebrityList}
       add={this.showInsertForm}
       remove={this.refreshCelebrityList}
+      onCardHover={this.selectCelebrity}
       onCardClick={this.showDetails} />
     const details = <CelebrityCard
       celebrity={this.state.celebrityShown}
