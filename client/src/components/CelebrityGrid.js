@@ -1,16 +1,25 @@
 import React from "react"
+import styled from "styled-components"
 import CelebrityCard from "./CelebrityCard"
+import Grid from "./generic/Grid"
+import { cardModes } from "../constants"
+
+const StyledCelebrityGrid = styled(Grid).attrs({
+    id: "celebrityGrid"
+})`
+    cursor: "pointer";
+`
 
 const CelebrityGrid = ({ celebrityList, add, remove }) => {
 
-    const dummyStyle = { cursor: "pointer" }
+    const generateCards = array => array.map(entry => <CelebrityCard celebrity={entry} callbackForRemove={remove} key={entry._id} mode={cardModes.small} />)
 
-    const generateCards = array => array.map(entry => <CelebrityCard celebrity={entry} callbackForRemove={remove} key={entry._id} />)
-
-    return <div>
-        <div style={dummyStyle} onClick={add}>Add</div>
-        {generateCards(celebrityList)}
-    </div>
+    return (
+        <StyledCelebrityGrid rows="2" columns="2">
+            <div onClick={add}>Add</div>
+            {generateCards(celebrityList)}
+        </StyledCelebrityGrid>
+    )
 }
 
 export default CelebrityGrid

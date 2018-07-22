@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import Icon from "./Icon"
+import Icon from "./generic/Icon"
 
 const SearchArea = styled.div.attrs({
     id: "searchArea"

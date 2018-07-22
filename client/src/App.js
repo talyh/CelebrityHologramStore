@@ -3,7 +3,7 @@ import Header from "./components/Header"
 import CelebrityGrid from "./components/CelebrityGrid"
 import CelebrityCard from "./components/CelebrityCard"
 import InsertForm from "./components/InsertForm"
-import pageModes from "./constants"
+import { pageModes, cardModes } from "./constants"
 
 class App extends Component {
   state = {
@@ -32,7 +32,7 @@ class App extends Component {
 
   render() {
     const list = <CelebrityGrid celebrityList={this.state.celebrityList} add={this.showInsertForm} remove={this.refreshCelebrityList} />
-    const details = <CelebrityCard />
+    const details = <CelebrityCard mode={cardModes.big} />
     const insertForm = <InsertForm onCancel={this.showList} onSave={this.showList} />
 
     const determineContents = () => {

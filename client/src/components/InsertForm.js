@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import Icon from "./Icon"
+import Icon from "./generic/Icon"
 
 class InsertForm extends Component {
     state = {

@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar"
 const StyledHeader = styled.div.attrs({
     id: "header"
 })`
+    display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 4fr 1fr;
     grid-template-areas: "Title Title Title Title Title"
@@ -16,7 +17,6 @@ const StyledHeader = styled.div.attrs({
     right:0;
     background-color:#005879;
     color:white;
-    display: grid;
 `
 
 const StyledTitle = styled.h1.attrs({
@@ -39,11 +39,13 @@ const StyledSubTitle = styled.h2.attrs({
 `
 
 const Header = ({ title, subtitle, onSearch, onTitleClick }) => {
-    return <StyledHeader>
-        <StyledTitle onClick={onTitleClick}>{title}</StyledTitle>
-        <StyledSubTitle>{subtitle}</StyledSubTitle>
-        <SearchBar onSearch={onSearch} />
-    </StyledHeader>
+    return (
+        <StyledHeader>
+            <StyledTitle onClick={onTitleClick}>{title}</StyledTitle>
+            <StyledSubTitle>{subtitle}</StyledSubTitle>
+            <SearchBar onSearch={onSearch} />
+        </StyledHeader>
+    )
 }
 
 export default Header
