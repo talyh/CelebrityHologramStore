@@ -2,15 +2,13 @@ import React from "react"
 import styled from "styled-components"
 import SearchBar from "./SearchBar"
 
-const StyledHeader = styled.div.attrs({
-    id: "header"
-})`
+const StyledHeader = styled.div`
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 4fr 1fr;
     grid-template-areas: "Title Title Title Title Title"
                         "Subtitle Subtitle Subtitle Search Search";
-    padding: 20px;
+    padding: 2em;
     position: fixed;
     z-index: 1;
     left:0;
@@ -19,18 +17,14 @@ const StyledHeader = styled.div.attrs({
     color:white;
 `
 
-const StyledTitle = styled.h1.attrs({
-    id: "title"
-})`
+const StyledTitle = styled.h1`
     grid-area: Title;   
     margin-top: 0;
     font-family: 'Courgette', cursive;
     cursor: ${props => props.onClick ? "pointer" : 'normal'};
 `
 
-const StyledSubTitle = styled.h2.attrs({
-    id: "subtitleArea"
-})`
+const StyledSubTitle = styled.h2`
     grid-area: Subtitle;
     height:2em;
     line-height:2em;
@@ -40,9 +34,9 @@ const StyledSubTitle = styled.h2.attrs({
 
 const Header = ({ title, subtitle, onSearch, onTitleClick }) => {
     return (
-        <StyledHeader>
-            <StyledTitle onClick={onTitleClick}>{title}</StyledTitle>
-            <StyledSubTitle>{subtitle}</StyledSubTitle>
+        <StyledHeader id="header">
+            <StyledTitle id="title" onClick={onTitleClick}>{title}</StyledTitle>
+            <StyledSubTitle id="subtitleArea">{subtitle}</StyledSubTitle>
             <SearchBar onSearch={onSearch} />
         </StyledHeader>
     )

@@ -5,17 +5,25 @@ import Grid from "./generic/Grid"
 import { cardModes } from "../constants"
 
 const StyledCelebrityGrid = styled(Grid).attrs({
-    id: "celebrityGrid"
+    id: "celebrityGrid",
+    rows: "2",
+    columns: "2",
+    columnGap: "1",
+    rowGap: "1"
 })`
-    cursor: "pointer";
 `
 
-const CelebrityGrid = ({ celebrityList, add, remove }) => {
+const CelebrityGrid = ({ celebrityList, add, remove, onCardClick }) => {
 
-    const generateCards = array => array.map(entry => <CelebrityCard celebrity={entry} callbackForRemove={remove} key={entry._id} mode={cardModes.small} />)
+    const generateCards = array => array.map(entry => <CelebrityCard
+        key={entry._id}
+        celebrity={entry}
+        callbackForRemove={remove}
+        mode={cardModes.small}
+        onClick={ev => onCardClick(ev.target.id)} />)
 
     return (
-        <StyledCelebrityGrid rows="2" columns="2">
+        <StyledCelebrityGrid>
             <div onClick={add}>Add</div>
             {generateCards(celebrityList)}
         </StyledCelebrityGrid>

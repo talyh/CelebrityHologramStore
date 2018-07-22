@@ -2,9 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import Icon from "./generic/Icon"
 
-const SearchArea = styled.div.attrs({
-    id: "searchArea"
-})`
+const SearchArea = styled.div`
     grid-area: Search;
     position: relative;
 `
@@ -51,7 +49,7 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <SearchArea>
+            <SearchArea id="searchArea">
                 <SearchBox onChange={this.setFilterCriteria} placeholder="Enter an id..." />
                 <SearchIcon onClick={() => this.search(this.state.filterCriteria)} />
             </SearchArea>

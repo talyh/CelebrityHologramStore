@@ -1,8 +1,24 @@
 import React from "react"
+import styled from "styled-components"
 import Icon from "./generic/Icon"
 import { cardModes } from "../constants"
 
-const CelebrityCard = ({ celebrity, callbackForRemove, mode }) => {
+const StyledCard = styled.div.attrs({
+})`
+    padding: 2em;
+    background-color: #E8E8E8;
+    cursor:${props => props.onClick ? "pointer" : "normal"};
+`
+
+const StyledName = styled.h1.attrs({
+})`
+    color: #707070;
+`
+
+const StyledRole = styled.div.attrs({
+})``
+
+const CelebrityCard = ({ celebrity, callbackForRemove, mode, onClick }) => {
     const remove = criteria => fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
         .then(response => response.ok ? response.json() : handleError(response))
         .then(callbackForRemove)
@@ -12,27 +28,27 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode }) => {
 
     const showRoles = () => {
         const roles = celebrity.roles.sort()
-        if (mode == cardModes.small) {
+        if (mode === cardModes.small) {
             return (
                 <div>
-                    <div>{roles[0]}</div>
-                    <div>{`${roles.length - 1} more`}</div>
+                    <StyledRole id={roles[0]}>{roles[0]}</StyledRole>
+                    {roles.length > 1 && <StyledRole id="More roles">{`${roles.length - 1} more`}</StyledRole>}
                 </div>
             )
         }
         else {
-            return roles.map(role => <div key={role}>{role}</div>)
+            return roles.map(role => <StyledRole id={role} key={role}>{role}</StyledRole>)
         }
     }
 
     return (
-        <div>
-            <h1>{celebrity.name}</h1>
-            {showRoles()}
+        <StyledCard id={celebrity._id} onClick={onClick}>
+            <StyledName id={celebrity.name}>{celebrity.name}</StyledName>
+            {/* {showRoles()} */}
             <img alt={`${celebrity.name}`} src={celebrity.pictureURL} />
-            <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>
+            {mode === cardModes.big && <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>}
             <Icon src="remove.png" alt="Remove" onClick={() => remove(celebrity._id)} />
-        </div>
+        </StyledCard>
     )
 }
 
