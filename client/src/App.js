@@ -43,11 +43,13 @@ class App extends Component {
     const list = <CelebrityGrid
       celebrityList={this.state.celebrityList}
       add={this.showInsertForm}
+      close={this.showList}
       remove={this.refreshCelebrityList}
       onCardHover={this.selectCelebrity}
       onCardClick={this.showDetails} />
     const details = <CelebrityCard
       celebrity={this.state.celebrityShown}
+      callbackForClose={this.showList}
       callbackForRemove={this.showList}
       mode={cardModes.big} />
     const insertForm = <InsertForm

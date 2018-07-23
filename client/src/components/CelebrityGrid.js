@@ -27,11 +27,12 @@ const AddIcon = styled(Icon).attrs({
 })`
 `
 
-const CelebrityGrid = ({ celebrityList, add, remove, onCardHover, onCardClick }) => {
+const CelebrityGrid = ({ celebrityList, add, close, remove, onCardHover, onCardClick }) => {
 
     const generateCards = array => array.map(entry => <CelebrityCard
         key={entry._id}
         celebrity={entry}
+        callbackForClose={close}
         callbackForRemove={remove}
         mode={cardModes.small}
         onHover={onCardHover}

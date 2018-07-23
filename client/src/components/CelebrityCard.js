@@ -22,31 +22,53 @@ export const StyledCard = styled.div`
 const StyledCelebrityCard = StyledCard.extend`
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-template-columns: 2fr 2fr 2fr;
-    grid-template-areas: "Picture Name Name"
-                        "Picture Roles Roles"
-                        "Picture . Remove";
-    column-gap: 1em;
+    grid-template-columns:  ${props => props.mode === cardModes.small ? "2fr 2fr 2fr" : "1fr 3fr 1fr"};
+    grid-template-areas: ${props => {
+        if (props.mode === cardModes.small) {
+            return " 'Picture Name Name'              'Picture Roles .'             'Picture Roles Remove' "
+        }
+        else {
+            return " 'Picture Name Close'         'Picture Roles Close'            'Picture More Remove' "
+        }
+    }};
+    column-gap: ${props => props.mode === cardModes.small ? "1em" : "3em"};
+    font-size: ${props => props.mode === cardModes.small ? "0.8em" : "1.2em"};
     padding: 1.5em;
 `
 
 const StyledName = styled.h1`
-    grid-area: Name;
-    font-size: ${props => props.mode === cardModes.small ? "1em" : "2em"};
+    grid-area: Name;   
     pointer-events: none;
 `
 
 const StyledRoles = styled.div`
     grid-area: Roles;
-    font-size: ${props => props.mode === cardModes.small ? "1em" : "2em"};
     color: #B9B9B9;
     pointer-events: none;
 `
 
-const StyledImage = styled.img`
+const Picture = styled.img`
     grid-area: Picture;
-    width: ${props => props.mode === cardModes.small ? "100px" : "300px"}
+    width: ${props => props.mode === cardModes.small ? "100px" : "200px"};
+    padding-top: ${props => props.mode === cardModes.big ? "30px" : "none"};
     pointer-events: none;
+`
+const CelebrityDetails = styled.div`
+    grid-area: More;
+`
+
+const RemoveButton = styled.input.attrs({
+    type: "button",
+    value: "Remove"
+})`
+    background-color: #790041;
+    margin: 0 0 0 auto;
+    color: white;
+    width: 120px;
+    height: 50px;
+    font-size: 1em;
+    align-self: center;
+    cursor: ${props => props.onClick ? "pointer" : "normal"};
 `
 
 const RemoveIcon = styled(Icon).attrs({
@@ -56,14 +78,30 @@ const RemoveIcon = styled(Icon).attrs({
     style: {
         paddingTop: "1.3em",
         paddingBottom: "0.7em",
-        marginLeft: "0.5em",
-        marginRight: "0.5em",
-        "gridArea": "Remove"
+        margin: "0 auto",
+        gridArea: "Remove"
+    }
+})`
+`
+const CloseIcon = styled(Icon).attrs({
+    id: "closeIcon",
+    src: "close.png",
+    alt: "Close",
+    style: {
+        gridArea: "Close",
+        margin: "0 0 auto auto"
     }
 })`
 `
 
-const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick, hoverScale, cellHeight, rolesInPreview }) => {
+const Logo = styled.img`
+   grid-area: More;
+   padding: 2em 0em 0em 1em;
+   transform: translateY(10%);
+   align-self: center;
+`
+
+const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, onHover, onClick, hoverScale, cellHeight, rolesInPreview }) => {
     const remove = criteria => fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
         .then(response => response.ok ? response.json() : handleError(response))
         .then(callbackForRemove)
@@ -105,12 +143,32 @@ const CelebrityCard = ({ celebrity, callbackForRemove, mode, onHover, onClick, h
     }
 
     return (
-        <StyledCelebrityCard id={celebrity._id} onClick={onClick} onMouseEnter={onHover && (ev => onHover(ev.target.id))} hoverScale={hoverScale} cellHeight={cellHeight} >
+        <StyledCelebrityCard
+            id={celebrity._id}
+            onClick={onClick}
+            onMouseEnter={onHover && (ev => onHover(ev.target.id))}
+            hoverScale={hoverScale}
+            cellHeight={cellHeight}
+            mode={mode} >
             <StyledName id={celebrity.name} mode={mode}>{celebrity.name}</StyledName>
             {showRoles()}
-            <StyledImage alt={`${celebrity.name}`} src={celebrity.pictureURL} mode={mode} />
-            {mode === cardModes.big && <div>Find out more @ <a href={celebrity.detailsURL}>IMDB</a></div>}
-            <RemoveIcon onClick={() => remove(celebrity._id)} />
+            <Picture alt={celebrity.name} src={celebrity.pictureURL} mode={mode} />
+            {
+                mode === cardModes.big &&
+                <CelebrityDetails id="details">
+                    Find out more @
+                    <a href={celebrity.detailsURL}><Logo src="/imgs/imdb_logo.png" width="80px" /></a>
+                </CelebrityDetails>
+            }
+            {
+                mode === cardModes.big ?
+                    <RemoveButton onClick={() => remove(celebrity._id)} /> :
+                    <RemoveIcon onClick={() => remove(celebrity._id)} />
+            }
+            {
+                mode === cardModes.big &&
+                <CloseIcon onClick={callbackForClose} />
+            }
         </StyledCelebrityCard >
     )
 }
