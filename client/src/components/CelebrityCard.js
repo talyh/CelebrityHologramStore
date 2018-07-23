@@ -11,10 +11,13 @@ import Logo from "./innerPieces/Logo"
 import { cardModes } from "../constants"
 
 const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, onHover, onClick, hoverScale, cellHeight, rolesInPreview }) => {
-    const remove = criteria => fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
-        .then(response => response.ok ? response.json() : handleError(response))
-        .then(callbackForRemove)
-        .catch(error => handleError(error))
+    const remove = (criteria, event) => {
+        event && event.stopPropagation()
+        fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
+            .then(response => response.ok ? response.json() : handleError(response))
+            .then(callbackForRemove)
+            .catch(error => handleError(error))
+    }
 
     const handleError = error => console.log(error)
 
@@ -72,7 +75,7 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
             {
                 mode === cardModes.big ?
                     <RemoveButton onClick={() => remove(celebrity._id)} /> :
-                    <RemoveIcon onClick={() => remove(celebrity._id)} />
+                    <RemoveIcon onClick={event => remove(celebrity._id, event)} />
             }
             {
                 mode === cardModes.small && <BlankArea></BlankArea>
