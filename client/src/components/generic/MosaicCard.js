@@ -13,6 +13,9 @@ const MosaicCard = styled.div`
 
     &:hover {
          transform: scale(${props => props.hoverScale}); 
+         ${
+    () => { props => props.onMouseOver }
+    }
       }
 `
 

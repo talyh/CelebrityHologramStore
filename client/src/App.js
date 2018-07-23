@@ -10,7 +10,7 @@ class App extends Component {
   state = {
     mode: "",
     celebrityList: [],
-    celebrityShown: ""
+    celebritySelected: ""
   }
 
   setCelebrityList = newList => this.setState({ celebrityList: newList })
@@ -25,7 +25,7 @@ class App extends Component {
   showList = () => { this.setState({ mode: pageModes.list }); this.refreshCelebrityList() }
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
   showDetails = () => this.setState({ mode: pageModes.details })
-  selectCelebrity = id => this.setState({ celebrityShown: this.state.celebrityList.filter(celebrity => celebrity._id === id)[0] })
+  selectCelebrity = id => this.setState({ celebritySelected: id })
 
   componentDidMount() {
     this.showList()
@@ -42,7 +42,7 @@ class App extends Component {
       onCardHover={this.selectCelebrity}
       onCardClick={this.showDetails} />
     const details = <CelebrityCard
-      celebrity={this.state.celebrityShown}
+      celebrity={this.state.celebrityList.filter(celebrity => celebrity._id === this.state.celebritySelected)[0]}
       callbackForClose={this.showList}
       callbackForRemove={this.showList}
       mode={cardModes.big} />

@@ -43,7 +43,6 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
         return condensedList
     }
 
-
     const showRoles = () => {
         const roles = [...celebrity.roles].sort()
         if (mode === cardModes.small) {
@@ -58,7 +57,7 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
         <Card
             id={celebrity._id}
             onClick={onClick}
-            onMouseEnter={onHover && (ev => onHover(ev.target.id))}
+            onMouseOver={onHover && (ev => onHover(ev.target.id))}
             hoverScale={hoverScale}
             cellHeight={cellHeight}
             mode={mode} >
