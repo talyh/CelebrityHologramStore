@@ -13,10 +13,13 @@ const TextInput = styled.input.attrs({
     width: ${ props => props.width || "100%"};
     
     &:focus {
-        padding: 3px 0px 3px 3px;
-        margin: 5px 1px 3px 0px;
         border: 1px solid rgba(0, 88, 121, 1);
         box-shadow: 0 0 5px rgba(0, 88, 121, 1);
+    }
+
+    &:not(:focus) {
+        border: ${props => props.valid ? "1px solid rgba(201, 201, 201, 1)" : "1px solid rgba(121, 0, 65, 1)"};
+        box-shadow: ${props => props.valid ? "0 0 5px rgba(201, 201, 201, 1)" : "0 0 5px rgba(121, 0, 65, 1)"};
     }
 `
 

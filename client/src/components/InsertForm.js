@@ -34,34 +34,137 @@ const ButtonsArea = styled.div`
 
 class InsertForm extends Component {
     state = {
-        name: "",
+        name: {
+            value: "",
+            valid: false
+        },
         picture: {
             url: "",
-            validURL: false
+            valid: false
         },
-        detailsURL: "",
-        roles: [""]
+        details: {
+            url: "",
+            valid: false
+        },
+        roles: {
+            value: [""],
+            valid: false
+        }
     }
 
-    changeName = ev => this.setState({ name: ev.target.value })
-    changePicture = ev => this.setState({ picture: { validURL: this.validatePictureURL(ev.target.value), url: ev.target.value } })
-    changeDetails = ev => this.setState({ detailsURL: ev.target.value })
-    addRole = () => this.setState(prevState => ({ roles: [...prevState.roles, ""] }))
-    changeRole = (index, ev) => this.setState({ roles: [...this.state.roles.slice(0, index), ev.target.value, ...this.state.roles.slice(index + 1)] })
-    removeRole = (index, ev) => this.setState({ roles: [...this.state.roles.slice(0, index), ...this.state.roles.slice(index + 1)] })
+    changeName = ev => this.setState({
+        name: {
+            ... this.state.name,
+            value: ev.target.value
+        }
+    })
+    blurName = ev => this.validateName(ev.target.value)
+    changePicture = ev => {
+        if (this.state.picture.valid) {
+            this.validatePictureURL(this.state.picture.url)
+        }
+
+        this.setState({
+            picture: {
+                ... this.state.picture,
+                url: ev.target.value
+            }
+        })
+    }
+    blurPicture = ev => this.validatePictureURL(ev.target.value)
+    changeDetails = ev => this.setState({
+        details: {
+            ... this.state.details,
+            url: ev.target.value
+        }
+    })
+    blurDetails = ev => this.validateDetailsURL(ev.target.value)
+    addRole = () => this.setState({
+        roles: {
+            ...this.state.roles, value: [...this.state.roles.value, ""]
+        }
+    })
+    changeRole = (index, ev) => this.setState({
+        roles: {
+            ...this.state.roles,
+            value: [...this.state.roles.value.slice(0, index), ev.target.value, ...this.state.roles.value.slice(index + 1)]
+        }
+    })
+    blurRole = ev => this.validateRoles(this.state.roles.value)
+    removeRole = (index, ev) => this.setState({
+        roles: {
+            ...this.state.roles,
+            value: [...this.state.roles.value.slice(0, index), ...this.state.roles.value.slice(index + 1)]
+        }
+    })
+
+    validateName = name => {
+        let valid = false
+        if (name) {
+            valid = true
+        }
+
+        this.setState({ name: { ...this.state.name, valid: valid } })
+    }
     validatePictureURL = url => {
+        const updateState = valid => this.setState({ picture: { ...this.state.picture, valid: valid } })
+
         const img = new Image()
-        let result = false
-        img.onerror = img.onabort = () => result = false
-        img.onload = () => result = true
         img.src = url
-        return result
+        img.onerror = img.onabort = () => { updateState(false) }
+        img.onload = () => { updateState(true) }
+    }
+    validateRoles = roles => {
+        let valid = false
+        let rolesCopy = [...roles]
+
+        if (rolesCopy.length > 0) {
+            rolesCopy = (rolesCopy.filter(role => role))
+            if (rolesCopy.length > 0) {
+                valid = true
+            }
+        }
+
+        this.setState({ roles: { ...this.state.roles, valid: valid } })
+    }
+    validateDetailsURL = url => {
+        var domain = '((?:[a-z][a-z\\.\\d\\-]+)\\.(?:[a-z][a-z\\-]+))(?![\\w\\.])'
+        var betwenDomainAndPath = '.*?\\/.*?(\\/)(nm)'
+        var id = '.*?(\\/)(.)(ref_)(=)'
+
+        const urlFormat = new RegExp(domain + betwenDomainAndPath + id);
+        let valid = false
+        if (urlFormat.test(url)) {
+            valid = true
+        }
+
+        this.setState({ details: { ...this.state.details, valid: valid } })
+    }
+    validateForm = () => {
+        this.validateName(this.state.name.value)
+        this.validateRoles(this.state.roles.value)
+        this.validateDetailsURL(this.state.details.url)
+        this.validatePictureURL(this.state.picture.url)
+
+        const valid = this.state.name.valid
+            && this.state.roles.valid
+            && this.state.details.valid
+            && this.state.picture.valid
+
+        return valid
     }
 
-    save = () => fetch(`http://localhost:3001/celebrities?name=${this.state.name}&roles=${JSON.stringify(this.state.roles)}&pictureURL=${this.state.picture.url}&detailsURL=${this.state.detailsURL}`, { method: 'POST' })
-        .then(response => response.ok ? response.json() : this.handleError(response))
-        .then(this.props.onSave)
-        .catch(error => this.handleError(error))
+    save = () => {
+        if (this.validateForm()) {
+            fetch(`http://localhost:3001/celebrities?name=${this.state.name.value}&roles=${JSON.stringify(this.state.roles.value)}&pictureURL=${this.state.picture.url}&detailsURL=${this.state.details.url}`, { method: 'POST' })
+                .then(response => response.ok ? response.json() : this.handleError(response))
+                .then(this.props.onSave)
+                .catch(error => this.handleError(error))
+        }
+        else {
+            console.log("Duh")
+        }
+    }
 
     handleError = error => console.log(error)
 
@@ -69,24 +172,24 @@ class InsertForm extends Component {
         return (
             <Card mode={cardModes.insertion}>
                 <NameInputArea>
-                    <TextInput placeholder="Enter a celebrity name" value={this.state.name} onChange={this.changeName} />
+                    <TextInput placeholder="Enter a celebrity name" valid={this.state.name.valid} value={this.state.name.value} onChange={this.changeName} onBlur={this.blurName} />
                 </NameInputArea>
                 <PictureInputArea>
-                    <TextInput placeholder="Enter a picture URL" value={this.state.picture.url} onChange={this.changePicture} />
+                    <TextInput placeholder="Paste a picture URL" valid={this.state.picture.valid} value={this.state.picture.url} onChange={this.changePicture} onBlur={this.blurPicture} />
                     <Picture
-                        src={this.state.picture.url ? this.state.picture.url : "/imgs/blank.png"}
-                        alt={this.state.picture.validURL ? "Image selected" : "No image selected"} />
+                        src={this.state.picture.url && this.state.picture.valid ? this.state.picture.url : "/imgs/blank.png"}
+                        alt={this.state.picture.url && this.state.picture.valid ? "Image selected" : "No image selected"} />
                 </PictureInputArea>
                 <RolesInputArea>
                     <AddIcon small alt="Add Role" onClick={this.addRole} id="roles" style={{ paddingRight: "0.5em", marginBottom: "0.5em", verticalAlign: "middle" }} />
                     Click to add more roles
-                    {this.state.roles.map((role, index) => <div key={index}>
-                        <TextInput placeholder="Enter a role" value={role} onChange={ev => this.changeRole(index, ev)} width="70%" />
+                    {this.state.roles.value.map((role, index) => <div key={index}>
+                        <TextInput placeholder="Enter a role" valid={this.state.roles.value[index]} value={role} onChange={ev => this.changeRole(index, ev)} onBlur={this.blurRole} width="70%" />
                         {index > 0 && <RemoveIcon alt="Remove Role" onClick={ev => this.removeRole(index, ev)} />}
                     </div>)}
                 </RolesInputArea>
                 <DetailsInputArea>
-                    <TextInput placeholder="Enter an IMDB URL" value={this.state.detailsURL} onChange={this.changeDetails} />
+                    <TextInput placeholder="Enter an IMDB URL" valid={this.state.details.valid} value={this.state.details.url} onChange={this.changeDetails} onBlur={this.blurDetails} />
                 </DetailsInputArea>
                 <ButtonsArea>
                     <CancelButton onClick={this.props.onCancel} />
