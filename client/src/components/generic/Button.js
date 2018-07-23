@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-const RemoveButton = styled.input.attrs({
+const Button = styled.input.attrs({
     type: "button",
-    value: "Remove"
+    value: `${props => props.value}`
 })`
-    background-color: #790041;
+    background-color: ${props => props.color || "#005879"};
     margin: 0 0 0 auto;
     color: white;
     width: 120px;
@@ -13,4 +13,4 @@ const RemoveButton = styled.input.attrs({
     align-self: center;
     cursor: ${props => props.onClick ? "pointer" : "normal"};
 `
-export default RemoveButton
+export default Button

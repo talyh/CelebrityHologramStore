@@ -26,7 +26,7 @@ const CelebrityGrid = ({ celebrityList, add, close, remove, onCardHover, onCardC
     return (
         <Mosaic id="celebrityGrid" size={cellSize} gap={gap} itemsAmount={celebrityList.length} area={window.innerWidth}>
             <AddCelebrityCard id="addCard" onClick={add} hoverScale={hoverScale}>
-                <AddIcon />
+                <AddIcon large style={{ alignSelf: "center", margin: "0 auto" }} />
                 Add a new celebrity
             </AddCelebrityCard>
             {generateCards(celebrityList)}

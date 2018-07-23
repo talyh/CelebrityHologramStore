@@ -4,7 +4,8 @@ import Name from "./innerPieces/CelebrityName"
 import Picture from "./innerPieces/CelebrityPicture"
 import Roles from "./innerPieces/CelebrityRoles"
 import Details from "./innerPieces/CelebrityDetails"
-import RemoveButton from "./innerPieces/RemoveButton"
+import BlankArea from "./generic/BlankArea"
+import { RemoveButton } from "./innerPieces/Buttons"
 import { RemoveIcon, CloseIcon } from "./innerPieces/Icons"
 import Logo from "./innerPieces/Logo"
 import { cardModes } from "../constants"
@@ -72,6 +73,9 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
                 mode === cardModes.big ?
                     <RemoveButton onClick={() => remove(celebrity._id)} /> :
                     <RemoveIcon onClick={() => remove(celebrity._id)} />
+            }
+            {
+                mode === cardModes.small && <BlankArea></BlankArea>
             }
             {
                 mode === cardModes.big &&

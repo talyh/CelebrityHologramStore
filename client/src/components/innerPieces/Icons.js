@@ -4,7 +4,7 @@ import Icon from "../generic/Icon"
 export const SearchIcon = styled(Icon).attrs({
     id: "searchIcon",
     src: "search.png",
-    alt: "Search",
+    alt: props => props.alt || "Search",
     style: {
         paddingTop: "1.3em",
         paddingBottom: "0.7em",
@@ -17,7 +17,7 @@ export const SearchIcon = styled(Icon).attrs({
 export const CloseIcon = styled(Icon).attrs({
     id: "closeIcon",
     src: "close.png",
-    alt: "Close",
+    alt: props => props.alt || "Close",
     style: {
         gridArea: "Close",
         margin: "0 0 auto auto"
@@ -28,12 +28,10 @@ export const CloseIcon = styled(Icon).attrs({
 export const RemoveIcon = styled(Icon).attrs({
     id: "removeIcon",
     src: "remove.png",
-    alt: "Remove",
+    alt: props => props.alt || "Remove",
     style: {
-        paddingTop: "1.3em",
-        paddingBottom: "0.7em",
-        margin: "0 auto",
-        gridArea: "Remove"
+        gridArea: "Remove",
+        margin: "auto 0 0 auto",
     }
 })`
 `
@@ -41,14 +39,7 @@ export const RemoveIcon = styled(Icon).attrs({
 export const AddIcon = styled(Icon).attrs({
     id: "addIcon",
     src: "add.png",
-    alt: "Add",
-    size: {
-        width: "5em",
-        heigth: "5em"
-    },
-    style: {
-        alignSelf: "center",
-        margin: "0 auto"
-    }
+    alt: props => props.alt || "Add",
+    style: props => props.style
 })`
 `
