@@ -1,16 +1,10 @@
 import React, { Component } from "react"
-import styled from "styled-components"
-import Header from "./components/Header"
+import TopBar from "./components/TopBar"
+import Content from "./components/Content"
 import CelebrityGrid from "./components/CelebrityGrid"
 import CelebrityCard from "./components/CelebrityCard"
 import InsertForm from "./components/InsertForm"
 import { pageModes, cardModes } from "./constants"
-
-const Content = styled.div`
-  position: relative;
-  top: 12em;
-  padding: 2em;
-`
 
 class App extends Component {
   state = {
@@ -70,7 +64,7 @@ class App extends Component {
 
     return (
       <div>
-        <Header
+        <TopBar
           title="Celebrity Hologram Store"
           subtitle="Your favorite celebrities in a single place"
           onSearch={this.setCelebrityList}

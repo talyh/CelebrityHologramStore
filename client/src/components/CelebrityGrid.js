@@ -1,31 +1,13 @@
 import React from "react"
-import styled from "styled-components"
-import CelebrityCard, { StyledCard } from "./CelebrityCard"
 import Mosaic from "./generic/Mosaic"
-import Icon from "./generic/Icon"
+import AddCelebrityCard from "./innerPieces/AddCelebrityCard"
+import CelebrityCard from "./CelebrityCard"
+import { AddIcon } from "./innerPieces/Icons"
 import { cardModes } from "../constants"
 
 const cellSize = { width: 288, height: 160 }
 const gap = 10
 const hoverScale = 1.1
-
-const AddIconCard = StyledCard.extend`
-    text-align:center;
-`
-const AddIcon = styled(Icon).attrs({
-    id: "addIcon",
-    src: "add.png",
-    alt: "Add",
-    size: {
-        width: "5em",
-        heigth: "5em"
-    },
-    style: {
-        alignSelf: "center",
-        margin: "0 auto"
-    }
-})`
-`
 
 const CelebrityGrid = ({ celebrityList, add, close, remove, onCardHover, onCardClick }) => {
 
@@ -43,10 +25,10 @@ const CelebrityGrid = ({ celebrityList, add, close, remove, onCardHover, onCardC
 
     return (
         <Mosaic id="celebrityGrid" size={cellSize} gap={gap} itemsAmount={celebrityList.length} area={window.innerWidth}>
-            <AddIconCard id="addCard" onClick={add} hoverScale={hoverScale}>
+            <AddCelebrityCard id="addCard" onClick={add} hoverScale={hoverScale}>
                 <AddIcon />
                 Add a new celebrity
-            </AddIconCard>
+            </AddCelebrityCard>
             {generateCards(celebrityList)}
         </Mosaic >
     )

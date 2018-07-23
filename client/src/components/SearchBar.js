@@ -1,35 +1,7 @@
 import React, { Component } from "react"
-import styled from "styled-components"
-import Icon from "./generic/Icon"
-
-const SearchArea = styled.div`
-    grid-area: Search;
-    position: relative;
-`
-
-const SearchBox = styled.input.attrs({
-    id: "searchBox",
-    type: "text"
-})`
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 100%;
-    font-size: 1em;
-`
-
-const SearchIcon = styled(Icon).attrs({
-    id: "searchIcon",
-    src: "search.png",
-    alt: "Search",
-    style: {
-        paddingTop: "1.3em",
-        paddingBottom: "0.7em",
-        marginLeft: "0.5em",
-        marginRight: "0.5em"
-    }
-})`
-`
+import SearchArea from "./innerPieces/SearchArea"
+import SearchBox from "./innerPieces/SearchBox"
+import { SearchIcon } from "./innerPieces/Icons"
 
 class SearchBar extends Component {
     state = {
