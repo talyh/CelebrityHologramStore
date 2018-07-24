@@ -24,7 +24,7 @@ class App extends Component {
 
   showList = () => { this.setState({ mode: pageModes.list }); this.refreshCelebrityList() }
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
-  showDetails = () => this.setState({ mode: pageModes.details })
+  showDetails = () => this.state.celebritySelected && this.setState({ mode: pageModes.details })
   selectCelebrity = id => this.setState({ celebritySelected: id })
 
   componentDidMount() {

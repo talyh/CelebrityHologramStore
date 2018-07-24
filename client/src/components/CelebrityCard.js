@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import Card from "./innerPieces/CelebrityCardContainer"
 import Name from "./innerPieces/CelebrityName"
 import Picture from "./innerPieces/CelebrityPicture"
@@ -7,21 +7,27 @@ import Details from "./innerPieces/CelebrityDetails"
 import BlankArea from "./generic/BlankArea"
 import { RemoveButton } from "./innerPieces/Buttons"
 import { RemoveIcon, CloseIcon } from "./innerPieces/Icons"
+import { ConfirmationModal } from "./innerPieces/Modals"
 import Logo from "./innerPieces/Logo"
 import { cardModes } from "../constants"
 
-const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, onHover, onClick, hoverScale, cellHeight, rolesInPreview }) => {
-    const remove = (criteria, event) => {
-        event && event.stopPropagation()
-        fetch(`http://localhost:3001/celebrities?id=${criteria}`, { method: 'DELETE' })
-            .then(response => response.ok ? response.json() : handleError(response))
-            .then(callbackForRemove)
-            .catch(error => handleError(error))
+class CelebrityCard extends Component {
+    state = {
+        confirmRemoval: false
     }
 
-    const handleError = error => console.log(error)
+    remove = event => {
+        event && event.stopPropagation()
 
-    const condenseList = (itemsToShow, list) => {
+        fetch(`http://localhost:3001/celebrities?id=${this.props.celebrity._id}`, { method: 'DELETE' })
+            .then(response => response.ok ? response.json() : this.handleError(response))
+            .then(this.props.callbackForRemove)
+            .catch(error => this.handleError(error))
+    }
+
+    handleError = error => console.log(error)
+
+    condenseList = (itemsToShow, list) => {
         let listSize = itemsToShow
 
         if (itemsToShow > list.length) {
@@ -35,7 +41,7 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
             condensedList = [...condensedList, newItem]
         }
 
-        if (rolesInPreview < list.length) {
+        if (this.props.rolesInPreview < list.length) {
             const showMore = <div id="More roles" key="moreRoles"> {`${list.length - itemsToShow} more`}</ div>
             condensedList = [...condensedList, showMore]
         }
@@ -43,48 +49,70 @@ const CelebrityCard = ({ celebrity, callbackForRemove, callbackForClose, mode, o
         return condensedList
     }
 
-    const showRoles = () => {
+    showRoles = () => {
+        const { celebrity, rolesInPreview, mode } = this.props
         const roles = [...celebrity.roles].sort()
         if (mode === cardModes.small) {
-            return <Roles mode={mode} id="roles">{condenseList(rolesInPreview, roles)}</Roles>
+            return <Roles mode={mode} id="roles">{this.condenseList(rolesInPreview, roles)}</Roles>
         }
         else {
-            return <Roles mode={mode} id="roles">{condenseList(roles.length, roles)}</Roles>
+            return <Roles mode={mode} id="roles">{this.condenseList(roles.length, roles)}</Roles>
         }
     }
 
-    return (
-        <Card
-            id={celebrity._id}
-            onClick={onClick}
-            onMouseOver={onHover && (ev => onHover(ev.target.id))}
-            hoverScale={hoverScale}
-            cellHeight={cellHeight}
-            mode={mode} >
-            <Name id={celebrity.name} mode={mode}>{celebrity.name}</Name>
-            {showRoles()}
-            <Picture alt={celebrity.name} src={celebrity.pictureURL} mode={mode} />
-            {
-                mode === cardModes.big &&
-                <Details id="details">
-                    Find out more @
+    confirmRemoval = event => {
+        event && event.stopPropagation()
+        this.setState({ confirmRemoval: true })
+    }
+
+    stay = event => {
+        event && event.stopPropagation()
+        this.setState({ confirmRemoval: false })
+    }
+
+    render() {
+        const { celebrity, callbackForClose, mode, onHover, onClick, hoverScale, cellHeight } = this.props
+        return (
+            <Card
+                id={celebrity._id}
+                onClick={onClick}
+                onMouseOver={onHover && (ev => onHover(ev.target.id))}
+                hoverScale={hoverScale}
+                cellHeight={cellHeight}
+                mode={mode} >
+                <Name id={celebrity.name} mode={mode}>{celebrity.name}</Name>
+                {this.showRoles()}
+                <Picture alt={celebrity.name} src={celebrity.pictureURL} mode={mode} />
+                {
+                    mode === cardModes.big &&
+                    <Details id="details">
+                        Find out more @
                     <a href={celebrity.detailsURL}><Logo src="/imgs/imdb_logo.png" width="80px" /></a>
-                </Details>
-            }
-            {
-                mode === cardModes.big ?
-                    <RemoveButton onClick={() => remove(celebrity._id)} /> :
-                    <RemoveIcon onClick={event => remove(celebrity._id, event)} />
-            }
-            {
-                mode === cardModes.small && <BlankArea></BlankArea>
-            }
-            {
-                mode === cardModes.big &&
-                <CloseIcon onClick={callbackForClose} />
-            }
-        </Card >
-    )
+                    </Details>
+                }
+                {
+                    mode === cardModes.big ?
+                        <RemoveButton onClick={this.confirmRemoval} /> :
+                        <RemoveIcon onClick={this.remove} />
+                }
+                {
+                    mode === cardModes.small && <BlankArea></BlankArea>
+                }
+                {
+                    mode === cardModes.big &&
+                    <CloseIcon onClick={callbackForClose} />
+                }
+
+                {
+                    this.state.confirmRemoval &&
+                    <ConfirmationModal
+                        message={`Confirm removal?`}
+                        onCancel={this.stay}
+                        onConfirm={this.remove} />
+                }
+            </Card >
+        )
+    }
 }
 
 export default CelebrityCard
