@@ -13,13 +13,12 @@ const CelebrityGrid = ({ celebrityList, add, close, remove, onCardHover, onCardC
 
     const generateCards = array => {
         const sorted = [...array].sort((entry, next) => entry.name > next.name ? 1 : (next.name > entry.name) ? -1 : 0)
-        console.log(sorted)
         return sorted.map(entry => <CelebrityCard
             key={entry._id}
             celebrity={entry}
             callbackForClose={close}
             callbackForRemove={remove}
-            mode={cardModes.small}
+            mode={cardModes.preview}
             onHover={onCardHover}
             onClick={onCardClick}
             hoverScale={hoverScale}

@@ -52,7 +52,7 @@ class CelebrityCard extends Component {
     showRoles = () => {
         const { celebrity, rolesInPreview, mode } = this.props
         const roles = [...celebrity.roles].sort()
-        if (mode === cardModes.small) {
+        if (mode === cardModes.preview) {
             return <Roles mode={mode} id="roles">{this.condenseList(rolesInPreview, roles)}</Roles>
         }
         else {
@@ -84,22 +84,22 @@ class CelebrityCard extends Component {
                 {this.showRoles()}
                 <Picture alt={celebrity.name} src={celebrity.pictureURL} mode={mode} />
                 {
-                    mode === cardModes.big &&
+                    mode === cardModes.details &&
                     <Details id="details">
                         Find out more @
                     <a href={celebrity.detailsURL}><Logo src="/imgs/imdb_logo.png" width="80px" /></a>
                     </Details>
                 }
                 {
-                    mode === cardModes.big ?
+                    mode === cardModes.details ?
                         <RemoveButton onClick={this.confirmRemoval} /> :
                         <RemoveIcon onClick={this.remove} />
                 }
                 {
-                    mode === cardModes.small && <BlankArea></BlankArea>
+                    mode === cardModes.preview && <BlankArea></BlankArea>
                 }
                 {
-                    mode === cardModes.big &&
+                    mode === cardModes.details &&
                     <CloseIcon onClick={callbackForClose} />
                 }
 

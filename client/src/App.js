@@ -45,7 +45,7 @@ class App extends Component {
       celebrity={this.state.celebrityList.filter(celebrity => celebrity._id === this.state.celebritySelected)[0]}
       callbackForClose={this.showList}
       callbackForRemove={this.showList}
-      mode={cardModes.big} />
+      mode={cardModes.details} />
     const insertForm = <InsertForm
       onCancel={this.showList}
       onSave={this.showList} />
