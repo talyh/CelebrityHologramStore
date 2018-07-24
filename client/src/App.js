@@ -5,6 +5,7 @@ import CelebrityGrid from "./components/CelebrityGrid"
 import CelebrityCard from "./components/CelebrityCard"
 import InsertForm from "./components/InsertForm"
 import { pageModes, cardModes } from "./constants"
+import get from "./operations/getRecords"
 
 class App extends Component {
   state = {
@@ -16,10 +17,10 @@ class App extends Component {
   setCelebrityList = newList => this.setState({ celebrityList: newList })
 
   refreshCelebrityList = () => {
-    fetch("http://localhost:3001/celebrities")
-      .then(response => response.ok ? response.json() : this.handleError(response))
-      .then(result => this.setCelebrityList(result))
-      .catch(error => this.handleError(error))
+    get("/celebrities",
+      result => this.setCelebrityList(result),
+      error => console.log("Error: ", error)
+    )
   }
 
   showList = () => { this.setState({ mode: pageModes.list }); this.refreshCelebrityList() }
@@ -27,13 +28,13 @@ class App extends Component {
   showDetails = () => this.state.celebritySelected && this.setState({ mode: pageModes.details })
   selectCelebrity = id => this.setState({ celebritySelected: id })
 
+  // when the component first renders, set the view to list and get the records from the server
   componentDidMount() {
     this.showList()
   }
 
-  handleError = error => console.log(error)
-
   render() {
+    // create the different components that will be used in each visualization and bind them to each view mode
     const list = <CelebrityGrid
       celebrityList={this.state.celebrityList}
       add={this.showInsertForm}
