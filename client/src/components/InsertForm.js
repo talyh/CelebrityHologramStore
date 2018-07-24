@@ -174,7 +174,7 @@ class InsertForm extends Component {
         if (this.validateForm()) {
             save(`/celebrities?name=${this.state.name.value}&roles=${JSON.stringify(this.state.roles.value)}&pictureURL=${this.state.picture.url}&detailsURL=${this.state.details.url}`,
                 () => this.setState({ confirmSave: true }),
-                error => console.log(error)
+                error => console.log("Error: ", error)
             )
         }
     }
