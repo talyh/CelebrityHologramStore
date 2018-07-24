@@ -5,7 +5,9 @@ import TextInput from "./generic/TextInput"
 import Picture from "./innerPieces/CelebrityPicture"
 import { AddIcon, RemoveIcon } from "./innerPieces/Icons"
 import { SaveButton, CancelButton } from "./innerPieces/Buttons"
-import { cardModes } from "../constants";
+import MessageModal from "./innerPieces/MessageModal"
+import { cardModes } from "../constants"
+
 
 const PictureInputArea = styled.div`
     grid-Area: Picture;
@@ -49,12 +51,13 @@ class InsertForm extends Component {
         roles: {
             value: [""],
             valid: false
-        }
+        },
+        confirmSave: false
     }
 
     changeName = ev => this.setState({
         name: {
-            ... this.state.name,
+            ...this.state.name,
             value: ev.target.value
         }
     })
@@ -66,7 +69,7 @@ class InsertForm extends Component {
 
         this.setState({
             picture: {
-                ... this.state.picture,
+                ...this.state.picture,
                 url: ev.target.value
             }
         })
@@ -74,7 +77,7 @@ class InsertForm extends Component {
     blurPicture = ev => this.validatePictureURL(ev.target.value)
     changeDetails = ev => this.setState({
         details: {
-            ... this.state.details,
+            ...this.state.details,
             url: ev.target.value
         }
     })
@@ -158,11 +161,8 @@ class InsertForm extends Component {
         if (this.validateForm()) {
             fetch(`http://localhost:3001/celebrities?name=${this.state.name.value}&roles=${JSON.stringify(this.state.roles.value)}&pictureURL=${this.state.picture.url}&detailsURL=${this.state.details.url}`, { method: 'POST' })
                 .then(response => response.ok ? response.json() : this.handleError(response))
-                .then(this.props.onSave)
+                .then(this.setState({ confirmSave: true }))
                 .catch(error => this.handleError(error))
-        }
-        else {
-            console.log("Duh")
         }
     }
 
@@ -195,6 +195,13 @@ class InsertForm extends Component {
                     <CancelButton onClick={this.props.onCancel} />
                     <SaveButton onClick={this.save} />
                 </ButtonsArea>
+
+                {
+                    this.state.confirmSave &&
+                    <MessageModal
+                        message={`${this.state.name.value} was saved`}
+                        onClick={this.props.onSave} />
+                }
             </Card>
         )
     }

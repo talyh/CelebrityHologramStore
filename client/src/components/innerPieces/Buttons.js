@@ -6,3 +6,5 @@ export const RemoveButton = ({ onClick }) => <Button value="Remove" color="#7900
 export const CancelButton = ({ onClick }) => <Button value="Cancel" color="#790041" onClick={() => onClick()} />
 
 export const SaveButton = ({ onClick }) => <Button value="Add" onClick={() => onClick()} />
+
+export const OkButton = ({ onClick }) => <Button value="Ok" onClick={() => onClick()} />
