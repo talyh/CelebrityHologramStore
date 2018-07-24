@@ -40,7 +40,7 @@ const ModalArea = styled.div`
         return smallModal.height;
     }};
     background-color: #C9C9C9;
-    box-shadow: inset 0px 0px 6px 2px rgba(0, 88, 121, 1);
+    box-shadow: inset 0px 0px 6px 2px rgba(141, 141, 141, 1);
 `
 
 const ModalContent = styled.div`
