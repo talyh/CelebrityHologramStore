@@ -10,6 +10,7 @@ import { RemoveIcon, CloseIcon } from "./innerPieces/Icons"
 import { ConfirmationModal } from "./innerPieces/Modals"
 import Logo from "./innerPieces/Logo"
 import { cardModes } from "../constants"
+import remove from "../operations/deleteRecord"
 
 // provide a card to display a specific celebrity, to be shown in either preview or details mode based off props
 class CelebrityCard extends Component {
@@ -21,13 +22,11 @@ class CelebrityCard extends Component {
         // prevent further events from being registered, to allow interaction with elements of the card even in preview mode
         event && event.stopPropagation()
 
-        fetch(`http://localhost:3001/celebrities?id=${this.props.celebrity._id}`, { method: 'DELETE' })
-            .then(response => response.ok ? response.json() : this.handleError(response))
-            .then(this.props.callbackForRemove)
-            .catch(error => this.handleError(error))
+        remove(`/celebrities?id=${this.props.celebrity._id}`,
+            () => this.props.callbackForRemove(),
+            error => console.log("Error: ", error)
+        )
     }
-
-    handleError = error => console.log(error)
 
     // check if a list has more items than should be shown in preview and return a condensed version of it
     condenseList = (itemsToShow, list) => {

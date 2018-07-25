@@ -5,8 +5,8 @@ import { CloseIcon } from "../innerPieces/Icons"
 // provide a styled modal, in 3 different possible sizes, that will take props content to be displayed inside it
 
 const smallModal = { width: `${window.innerWidth * 0.3}px`, height: `${window.innerHeight * 0.3}px` }
-const mediumModal = { width: `${window.innerWidth * 0.7}px`, height: `${window.innerHeight * 0.7}px` }
-const largeModal = { width: `${window.innerWidth * 0.9}px`, height: `${window.innerHeight * 0.9}px` }
+const mediumModal = { width: `${window.innerWidth * 0.45}px`, height: `${window.innerHeight * 0.45}px` }
+const largeModal = { width: `${window.innerWidth * 0.7}px`, height: `${window.innerHeight * 0.7}px` }
 
 const ModalBackground = styled.div`
     display: flex;

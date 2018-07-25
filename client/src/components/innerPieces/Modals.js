@@ -22,7 +22,7 @@ export const MessageModal = ({ message, onClick }) => {
 
 export const ConfirmationModal = ({ message, onCancel, onConfirm }) => {
     return (
-        <Modal small >
+        <Modal medium >
             <Message>{message}</Message>
             <div>
                 <CancelButton onClick={onCancel} />
