@@ -9,7 +9,7 @@ import get from "./operations/getRecords"
 
 class App extends Component {
   state = {
-    mode: "",
+    mode: pageModes.list,
     celebrityList: [],
     celebritySelected: ""
   }
@@ -30,7 +30,7 @@ class App extends Component {
 
   // when the component first renders, set the view to list and get the records from the server
   componentDidMount() {
-    this.showList()
+    this.refreshCelebrityList()
   }
 
   render() {
