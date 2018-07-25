@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a base card style, with the proper cursor and hover behaviour
 const MosaicCard = styled.div`
     display: grid;
     grid-template-rows: 2fr 1fr;
@@ -14,8 +15,8 @@ const MosaicCard = styled.div`
     &:hover {
          transform: scale(${props => props.hoverScale}); 
          ${
-    () => { props => props.onMouseOver }
-    }
+  () => { props => props.onMouseOver }
+  }
       }
 `
 

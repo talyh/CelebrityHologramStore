@@ -4,6 +4,7 @@ import AppTitle from "./innerPieces/AppTitle"
 import AppSubtitle from "./innerPieces/AppSubTitle"
 import SearchBar from "./SearchBar"
 
+// provide a top bar with a title, subtitle and search bar
 const TopBar = ({ title, subtitle, onSearch, onTitleClick }) => {
     return (
         <Header id="header">

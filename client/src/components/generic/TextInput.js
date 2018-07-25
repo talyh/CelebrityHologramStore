@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a formatted text input, with focus and error highlighting
 const TextInput = styled.input.attrs({
     type: "text"
 })`

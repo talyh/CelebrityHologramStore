@@ -1,6 +1,7 @@
 import Card from "../generic/MosaicCard"
 import { cardModes } from "../../constants"
 
+// provide a Celebrity Card based off the basic Card, adjustable depending on the mode
 const CelebrityCardContainer = Card.extend`
     display: grid;
     grid-template-rows: ${props => props.mode === cardModes.insertion ? "1fr 3fr 1fr 1fr" : "1fr 1fr 1fr"};

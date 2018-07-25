@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import Icon from "../generic/Icon"
 
+// provide a library of icons to be used throughout the application
+
 export const SearchIcon = styled(Icon).attrs({
     id: "searchIcon",
     src: "search.png",

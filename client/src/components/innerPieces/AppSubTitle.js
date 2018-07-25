@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a styled subtitle
 const AppSubtitle = styled.h2`
     grid-area: Subtitle;
     height:2em;

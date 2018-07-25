@@ -11,12 +11,14 @@ import { ConfirmationModal } from "./innerPieces/Modals"
 import Logo from "./innerPieces/Logo"
 import { cardModes } from "../constants"
 
+// provide a card to display a specific celebrity, to be shown in either preview or details mode based off props
 class CelebrityCard extends Component {
     state = {
         confirmRemoval: false
     }
 
     remove = event => {
+        // prevent further events from being registered, to allow interaction with elements of the card even in preview mode
         event && event.stopPropagation()
 
         fetch(`http://localhost:3001/celebrities?id=${this.props.celebrity._id}`, { method: 'DELETE' })
@@ -27,6 +29,7 @@ class CelebrityCard extends Component {
 
     handleError = error => console.log(error)
 
+    // check if a list has more items than should be shown in preview and return a condensed version of it
     condenseList = (itemsToShow, list) => {
         let listSize = itemsToShow
 
@@ -49,6 +52,7 @@ class CelebrityCard extends Component {
         return condensedList
     }
 
+    // display sorted roles, respecting the limit to be shown in preview mode
     showRoles = () => {
         const { celebrity, rolesInPreview, mode } = this.props
         const roles = [...celebrity.roles].sort()
@@ -60,6 +64,7 @@ class CelebrityCard extends Component {
         }
     }
 
+    // offer confirmation of removal
     confirmRemoval = event => {
         event && event.stopPropagation()
         this.setState({ confirmRemoval: true })
@@ -72,6 +77,8 @@ class CelebrityCard extends Component {
 
     render() {
         const { celebrity, callbackForClose, mode, onHover, onClick, hoverScale, cellHeight } = this.props
+
+        // render a card with properties based off the mdoe (preview or details)
         return (
             <Card
                 id={celebrity._id}
@@ -83,6 +90,7 @@ class CelebrityCard extends Component {
                 <Name id={celebrity.name} mode={mode}>{celebrity.name}</Name>
                 {this.showRoles()}
                 <Picture alt={celebrity.name} src={celebrity.pictureURL} mode={mode} />
+                {/* only show details if in details mode */}
                 {
                     mode === cardModes.details &&
                     <Details id="details">
@@ -90,19 +98,24 @@ class CelebrityCard extends Component {
                     <a href={celebrity.detailsURL}><Logo src="/imgs/imdb_logo.png" width="80px" /></a>
                     </Details>
                 }
+                {/* on details mode, show remove button with confirmation
+                on preview mode, show a remove icon without confirmation */}
                 {
                     mode === cardModes.details ?
                         <RemoveButton onClick={this.confirmRemoval} /> :
                         <RemoveIcon onClick={this.remove} />
                 }
+                {/* on preview mode, add a blank area to help the grid distribution */}
                 {
                     mode === cardModes.preview && <BlankArea></BlankArea>
                 }
+                {/* on details mode, show a close icon */}
                 {
                     mode === cardModes.details &&
                     <CloseIcon onClick={callbackForClose} />
                 }
 
+                {/* if needed, show a modal to confirm removal */}
                 {
                     this.state.confirmRemoval &&
                     <ConfirmationModal

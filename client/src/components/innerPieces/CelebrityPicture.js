@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { cardModes } from "../../constants"
 
+// provide a styled version of the celebrity picture, adjustable depending on the mode
 const CelebrityPicture = styled.img`
     grid-area: Picture;
     width: ${props => props.mode === cardModes.preview ? "100px" : "200px"};

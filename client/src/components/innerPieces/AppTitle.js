@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a styled title
 const AppTitle = styled.h1`
     grid-area: Title;   
     margin-top: 0;

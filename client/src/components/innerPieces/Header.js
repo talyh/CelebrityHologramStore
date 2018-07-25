@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a styled version of the header
 const Header = styled.div`
     display: grid;
     grid-template-rows: 1fr 1fr;

@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a generic styled button, with default color if none is provided
 const Button = styled.input.attrs({
     type: "button",
     value: `${props => props.value}`

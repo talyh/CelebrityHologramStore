@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
+// provide a generic styled icon, with 3 different possible sizes
 const smallIcon = { width: "24px", height: "24px" }
 const mediumIcon = { width: "42px", height: "42px" }
 const largeIcon = { width: "60px", height: "60px" }

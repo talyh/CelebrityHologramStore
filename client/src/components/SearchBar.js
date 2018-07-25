@@ -1,8 +1,10 @@
 import React, { Component } from "react"
 import SearchArea from "./innerPieces/SearchArea"
-import SearchBox from "./innerPieces/SearchBox"
+import TextInput from "./generic/TextInput"
 import { SearchIcon } from "./innerPieces/Icons"
+import get from "../operations/getRecords"
 
+// provide a search bar comprised of input field and search icon
 class SearchBar extends Component {
     state = {
         filterCriteria: ""
@@ -11,18 +13,17 @@ class SearchBar extends Component {
     setFilterCriteria = ev => this.setState({ filterCriteria: ev.target.value })
 
     search = criteria => {
-        fetch(`http://localhost:3001/celebrities?id=${criteria}`)
-            .then(response => response.ok ? response.json() : this.handleError(response))
-            .then(result => this.props.onSearch(result))
-            .catch(error => this.handleError(error))
+        get(`/celebrities?id=${criteria}`,
+            result => this.props.onSearch(result),
+            error => console.log("Error: ", error)
+        )
     }
-
-    handleError = error => console.log(error)
 
     render() {
         return (
             <SearchArea id="searchArea">
-                <SearchBox onChange={this.setFilterCriteria} placeholder="Enter an id..." />
+                <TextInput valid={true} width="70%" onChange={this.setFilterCriteria} placeholder="Enter an id..."
+                    style={{ top: "50%", transform: "translateY(-50%)" }} />
                 <SearchIcon onClick={() => this.search(this.state.filterCriteria)} />
             </SearchArea>
         )

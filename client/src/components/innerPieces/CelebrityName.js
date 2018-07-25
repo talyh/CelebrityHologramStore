@@ -1,5 +1,6 @@
 import styled from "styled-components"
 
+// provide a styled display of the celebrity name
 const CelebrityName = styled.h1`
     grid-area: Name;   
     margin-top: 0;
