@@ -14,7 +14,7 @@ class App extends Component {
     celebritySelected: ""
   }
 
-  setCelebrityList = newList => this.setState({ celebrityList: newList })
+  setCelebrityList = newList => Array.isArray(newList) && this.setState({ celebrityList: newList })
 
   refreshCelebrityList = () => {
     get("/celebrities",
@@ -27,6 +27,7 @@ class App extends Component {
   showInsertForm = () => this.setState({ mode: pageModes.insertion })
   showDetails = () => this.state.celebritySelected && this.setState({ mode: pageModes.details })
   selectCelebrity = id => this.setState({ celebritySelected: id })
+  getCelebrity = id => this.state.celebrityList.filter(celebrity => celebrity._id === id)[0]
 
   // when the component first renders, set the view to list and get the records from the server
   componentDidMount() {
@@ -43,7 +44,7 @@ class App extends Component {
       onCardHover={this.selectCelebrity}
       onCardClick={this.showDetails} />
     const details = <CelebrityCard
-      celebrity={this.state.celebrityList.filter(celebrity => celebrity._id === this.state.celebritySelected)[0]}
+      celebrity={this.getCelebrity(this.state.celebritySelected)}
       callbackForClose={this.showList}
       callbackForRemove={this.showList}
       mode={cardModes.details} />
@@ -73,7 +74,7 @@ class App extends Component {
         <Content id="content">
           {determineContents()}
         </Content>
-      </div>
+      </div >
     )
   }
 }
