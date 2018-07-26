@@ -255,82 +255,95 @@ describe("Operations", () => {
       expect(rendered.state().celebrityList).toEqual([])
     })
   })
-})
 
-/*
- * UNIT TESTS
- * 
- * Props and Rendering (a few can be covered by snapshot)
- * 
- * 1. DONE - if state.pageModes.list then Content has a CelebrityGrid
- * 
- * 2. DONE - if state.pageModes.details then Content has a CelebrityCard
- * 
- * 3. DONE - if state.pageModes.insertion then Content has an InsertForm
- * 
- * 
- * 4. DONE - CelebrityGrid.celebrityList receives state.celebrityList
- * 
- * 5. DONE - CelebrityGrid.add receives showInsertForm
- * 
- * 6. DONE = CelebrityGrid.close receives showList
- * 
- * 7. DONE - CelebrityGrid.onCardHover receives selectCelebrity
- * 
- * 8. DONE - CelebrityGrid.onCardClick receives showDetails
- * 
- * 
- * 9. DONE - CelebrityCard.celebrity receives object representing state.celebritySelected
- * 
- * 10. DONE - CelebrityCard.callbackForClose receives showList
- * 
- * 11. DONE - CelebrityCard.callbackForRemove receives showList
- * 
- * 12. DONE - CelebrityCard.mode receives cardModes.details
- * 
- * 
- * 13. DONE - InsertForm.onCancel receives showList
- * 
- * 14. DONE - InsertForm.onSave receives showList
- * 
- * 
- * 15. SNAPSHOT - TopBar.title receives "Celebrity Hologram Store"
- * 
- * 16. SNAPSHOT - TopBar.subtitle receives "Your favorite celebrities in a single place"
- * 
- * 17. DONE - TopBar.onSearch receives setCelebrityList
- * 
- * 18. DONE - TopBar.onTitleClick receives showList
- * 
- * 
- * Operations
- * 
- * 19. setCelebrityList updates state.celebrityList with received array
- * 
- * 20. setCelebrityList doesn't update state if argument is not array
- * 
- * 
- * 21. refreshCelebrityList calls get passing "/celebrities", callback for setCelebrityList, 
- * and callback for logging error
- * 
- * 
- * 22. showList changes state.mode to list
- * 
- * 23. showList calls refreshCelebrityList
- * 
- * 
- * 24. showInsertForm changes state.mode to insertion
- * 
- * 
- * 25. showDetails changes state.mode to details if state.celebritySelected
- * 
- * 26. showDetails does nothing if no state.celebritySelected
- * 
- * 
- * 27. select celebrity changes state.celebritySelected to the argument received
- * 
- * 
- * 28. componentDidMount calls refreshCelebrityList
- * 
- * 
- */
+  describe("refreshCelebrityList", () => {
+    it("refreshCelebrityList calls get with the proper arguments"
+      // TODO - Need to figure out how to assert that not only get was called, but that it received the right arguments
+    )
+  })
+
+  describe("showList", () => {
+    it("showList updates state.mode with list", () => {
+      const rendered = shallow(<App />)
+      rendered.setState({
+        mode: pageModes.details
+      })
+
+      rendered.instance().showList()
+
+      expect(rendered.state().mode).toEqual(pageModes.list)
+    })
+
+    it("showList calls refreshList", () => {
+      const rendered = shallow(<App />)
+      const mockedRefresh = jest.spyOn(rendered.instance(), "refreshCelebrityList")
+
+      rendered.instance().showList()
+
+      expect(mockedRefresh).toBeCalled()
+    })
+  })
+
+  describe("showInsertForm", () => {
+    it("showInsertForm updates state.mode with insertion", () => {
+      const rendered = shallow(<App />)
+
+      rendered.instance().showInsertForm()
+
+      expect(rendered.state().mode).toEqual(pageModes.insertion)
+    })
+  })
+
+  describe("showDetails", () => {
+    it("showDetails updates state.mode with details when celebrity is selected", () => {
+      const rendered = shallow(<App />)
+      rendered.setState({
+        celebritySelected: "123"
+      })
+
+      rendered.instance().showDetails()
+
+      expect(rendered.state().mode).toEqual(pageModes.details)
+    })
+
+    it("showDetails doesn't change state when celebrity is not selected", () => {
+      const rendered = shallow(<App />)
+      const originalState = rendered.state()
+
+      rendered.instance().showDetails()
+
+      expect(rendered.state()).toEqual(originalState)
+    })
+  })
+
+  describe("selectCelebrity", () => {
+    it("selectCelebrity updates state.celebritySelected with argument", () => {
+      const rendered = shallow(<App />)
+      const id = "123"
+
+      rendered.instance().selectCelebrity(id)
+
+      expect(rendered.state().celebritySelected).toEqual(id)
+    })
+  })
+
+  describe("getCelebrity", () => {
+    it("getCelebrity filters celebrityList based on argument", () => {
+      const rendered = shallow(<App />)
+      rendered.setState({
+        celebrityList: [{ _id: "123" }, { _id: "456" }]
+      })
+      const id = "123"
+
+      const returned = rendered.instance().getCelebrity(id)
+
+      expect(returned).toEqual({ _id: "123" })
+    })
+  })
+
+  describe("componentDidMount", () => {
+    it("componentDidMount calls refreshList"
+      // TODO - Need to figure out how to simulate componentDidMount
+    )
+  })
+})
